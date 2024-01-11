@@ -14,12 +14,7 @@ namespace ConsoleApp11
         {
             var validator = new StudentValidator(student);
 
-            bool valid = validator.IsValid(out var results);
-
-            if (!valid)
-            {
-                throw new Exception("Data is invalid", new Exception(String.Join("\n", results.Where(kv => !kv.Value.IsValid).Select(kv => $"{kv.Key}:  {kv.Value.ErrorMessage}"))));
-            }
+            validator.IsValid(out var results).Confirm(results);
 
             Save(student);
         }

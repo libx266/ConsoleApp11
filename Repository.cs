@@ -14,15 +14,15 @@ namespace ConsoleApp11
 
         protected List<T> Select(string sql)
         {
-            using (SqlConnection connection = new SqlConnection(_connectionString))
+            using (var connection = new SqlConnection(_connectionString))
             {
                 connection.Open();
 
-                using (SqlCommand command = new SqlCommand(sql, connection))
+                using (var command = new SqlCommand(sql, connection))
                 {
-                    using (SqlDataReader reader = command.ExecuteReader())
+                    using (var reader = command.ExecuteReader())
                     {
-                        DataTable dataTable = new DataTable();
+                        var dataTable = new DataTable();
                         dataTable.Load(reader);
                         return Deserialize(dataTable).ToList();
                     }
