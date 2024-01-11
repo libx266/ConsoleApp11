@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 
 namespace ConsoleApp11
@@ -12,10 +13,17 @@ namespace ConsoleApp11
         protected readonly T value;
         protected readonly Dictionary<string, Func<T, ValidationResult>> validations;
 
-        public Validator(T value)
+        public Validator(T value, Dictionary<string, Func<T, ValidationResult>>? excludeValidations)
         {
             this.value = value;
             validations = ConstructValidations();
+            if (excludeValidations is not null)
+            {
+                foreach(var kv in excludeValidations)
+                {
+                    validations[kv.Key] = kv.Value;
+                }
+            }
         }
 
         protected abstract Dictionary<string, Func<T, ValidationResult>> ConstructValidations();
@@ -34,12 +42,16 @@ namespace ConsoleApp11
             {
                 string propertyName = property.Name;
 
-                var validResult = validations[propertyName](value);
-                if (!validResult.IsValid)
+                var validator = validations.GetValueOrDefault(propertyName);
+                if (validator is not null)
                 {
-                    valid = false;
+                    var validResult = validator.Invoke(value);
+                    if (!validResult.IsValid)
+                    {
+                        valid = false;
+                    }
+                    validationResults[propertyName] = validResult;
                 }
-                validationResults[propertyName] = validResult;
             }
 
             return valid;
