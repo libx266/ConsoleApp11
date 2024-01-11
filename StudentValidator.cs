@@ -12,9 +12,9 @@ namespace ConsoleApp11
 
         protected override Dictionary<string, Func<StudentModel, ValidationResult>> ConstructValidations() => new()
         {
-            [nameof(StudentModel.Id)] = s => (s.Id > 0).IfError("Id is invalid"),
-            [nameof(StudentModel.Name)] = s => (s.Name.Length < 32).IfError("Name length must be less than 32 characters"),
-            [nameof(StudentModel.Inn)] = s => (s.Inn.Length == 12).IfError("Inn length must be equals 12")
+            [nameof(StudentModel.Id)] = s => (s.Id > 0).IfError("value must bi positive"),
+            [nameof(StudentModel.Name)] = s => (s.Name.Length < 32).IfError("length must be less than 32 characters"),
+            [nameof(StudentModel.Inn)] = s => (s.Inn.Length == 12).IfError("length must be equals 12")
         };
     }
 }

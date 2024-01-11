@@ -18,7 +18,7 @@ namespace ConsoleApp11
             if (!value)
             {
                 string errors = String.Join("\n", validationResults.Where(kv => !kv.Value.IsValid).Select(kv => $"{kv.Key}:  {kv.Value.ErrorMessage}"));
-                throw new Exception($"Validation failed in `{callerTypeName}` by operation `{callerTypeName}`", new Exception(errors));
+                throw new Exception($"Validation failed in `{callerTypeName}` by operation `{callerMemberName}`", new Exception(errors));
             }
         }
     }
